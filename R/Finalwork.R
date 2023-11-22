@@ -11,6 +11,11 @@ datanormal <-(DynamicCancerDriverKM::BRCA_normal)
 datapt <-(DynamicCancerDriverKM::BRCA_PT)
 final_data <- bind_rows(datanormal, datapt)
 
-umbral_expresion <- ncol(final_data) * 0.2
-final_data_filtrado <- final_data %>%
-  filter(rowSums(. != 0, na.rm = TRUE) >= umbral_expresion)
+porcentaje_menor_10 <- colMeans(final_data < 700, na.rm = TRUE)
+columnas_a_eliminar <- names(porcentaje_menor_10[porcentaje_menor_10 >= 0.8])
+final_data_filtrado <- final_data[, !names(final_data) %in% columnas_a_eliminar]
+final_data_filtrado2 <- final_data
+
+PPI<-(DynamicCancerDriverKM::PPI)
+
+
